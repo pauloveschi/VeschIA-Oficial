@@ -1,5 +1,5 @@
 import { FileText, ArrowUpRight, Sparkles } from "lucide-react";
-import heroBg from "./assets/hero-bg.png";
+import logo from "./assets/logo.png";
 
 const MODULOS = [
   {
@@ -15,12 +15,24 @@ const MODULOS = [
 function App() {
   return (
     <div className="min-h-svh flex flex-col">
-      <main className="flex-1">
-        <section className="w-full">
-          <img src={heroBg} alt="VeschIA" className="w-full h-auto block" />
-        </section>
+      <header className="flex items-center justify-between px-6 py-5 max-w-5xl mx-auto w-full">
+        <img src={logo} alt="VeschIA" className="h-9" />
+        <span className="text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--vs-text-muted)" }}>
+          Soluções Inteligentes
+        </span>
+      </header>
 
-        <section className="px-6 py-14 text-center" style={{ background: "var(--vs-bg)" }}>
+      <main className="flex-1">
+        <section
+          className="relative overflow-hidden px-6 py-20 text-center"
+          style={{ background: "radial-gradient(ellipse at top, rgba(0,114,255,0.16), transparent 65%)" }}
+        >
+          <img
+            src={logo}
+            alt="VeschIA"
+            className="h-40 md:h-52 mx-auto mb-8"
+            style={{ filter: "drop-shadow(0 0 40px rgba(0,210,255,0.35))" }}
+          />
           <h1 className="text-3xl md:text-5xl font-semibold leading-tight max-w-2xl mx-auto">
             Inovação que trabalha por você.
           </h1>
