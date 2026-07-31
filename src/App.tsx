@@ -118,7 +118,7 @@ function App() {
       <header className="flex items-center justify-between px-6 py-5 max-w-5xl mx-auto w-full">
         <img src={logo} alt="VeschIA" className="h-9" />
         <span className="text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--vs-text-muted)" }}>
-          Soluções Inteligentes
+          Inovação e Tecnologia
         </span>
       </header>
 
@@ -134,7 +134,7 @@ function App() {
             style={{ filter: "drop-shadow(0 0 40px rgba(0,210,255,0.35))" }}
           />
           <h1 className="text-3xl md:text-5xl font-semibold leading-tight max-w-2xl mx-auto">
-            Inovação que trabalha por você.
+            Soluções Inteligentes que trabalham por você.
           </h1>
           <p
             className="mt-5 text-sm md:text-base max-w-xl mx-auto leading-relaxed"
