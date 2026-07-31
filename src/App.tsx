@@ -60,6 +60,20 @@ const MODULOS: Modulo[] = [
   },
 ];
 
+/**
+ * Centraliza a última fileira. Com 5 cards numa grade de 3 colunas, os 2 últimos
+ * ficariam encostados à esquerda. A saída é dobrar as colunas (6) e dar span 2 a
+ * cada card: aí dá pra empurrar o 4º pra coluna 2, e a fileira de baixo ocupa as
+ * colunas 2 a 5, centralizada. Mesma ideia no breakpoint menor, com 4 colunas.
+ */
+const POSICAO_NA_GRADE = [
+  "",
+  "",
+  "",
+  "lg:col-start-2",
+  "sm:col-start-2 lg:col-start-auto",
+];
+
 function CardConteudo({ modulo }: { modulo: Modulo }) {
   const Icone = modulo.icone;
   const disponivel = modulo.href !== null;
@@ -139,15 +153,16 @@ function App() {
             </h2>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {MODULOS.map((m) =>
-              m.href ? (
+          <div className="grid gap-4 sm:grid-cols-4 lg:grid-cols-6">
+            {MODULOS.map((m, i) => {
+              const posicao = `sm:col-span-2 ${POSICAO_NA_GRADE[i] ?? ""}`;
+              return m.href ? (
                 <a
                   key={m.slug}
                   href={m.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group rounded-2xl p-6 text-left transition-all hover:-translate-y-0.5"
+                  className={`group rounded-2xl p-6 text-left transition-all hover:-translate-y-0.5 ${posicao}`}
                   style={{
                     background: "rgba(255,255,255,0.03)",
                     border: "1px solid rgba(0,210,255,0.25)",
@@ -158,7 +173,7 @@ function App() {
               ) : (
                 <div
                   key={m.slug}
-                  className="rounded-2xl p-6 text-left"
+                  className={`rounded-2xl p-6 text-left ${posicao}`}
                   style={{
                     background: "rgba(255,255,255,0.015)",
                     border: "1px dashed rgba(255,255,255,0.12)",
@@ -166,8 +181,8 @@ function App() {
                 >
                   <CardConteudo modulo={m} />
                 </div>
-              ),
-            )}
+              );
+            })}
           </div>
         </section>
       </main>
