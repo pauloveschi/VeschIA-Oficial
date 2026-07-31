@@ -1,16 +1,102 @@
-import { FileText, ArrowUpRight, Sparkles } from "lucide-react";
+import { FileText, Bot, ChartColumn, ShieldCheck, Workflow, ArrowUpRight, Sparkles } from "lucide-react";
+import type { ComponentType } from "react";
 import logo from "./assets/logo.png";
 
-const MODULOS = [
+interface Modulo {
+  slug: string;
+  nome: string;
+  titulo: string;
+  descricao: string;
+  icone: ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  /** Quando null, o módulo ainda não está no ar e o card não vira link. */
+  href: string | null;
+}
+
+const MODULOS: Modulo[] = [
   {
     slug: "aip",
     nome: "AIP",
     titulo: "Automação Inteligente de Processos",
     descricao:
       "Fluxo de aprovação configurável por empresa, com IA analisando documento em cada etapa. Contratos hoje; RH, Financeiro, Compras, Jurídico e Comercial em breve.",
+    icone: FileText,
     href: "https://veschia-aip.vercel.app",
   },
+  {
+    slug: "aia",
+    nome: "AIA",
+    titulo: "Agentes Inteligentes Autônomos",
+    descricao:
+      "Colaboradores digitais que atendem, qualificam e agendam sozinhos, 24 horas por dia. Pré-venda, suporte, recepção, agendamento e captação de leads.",
+    icone: Bot,
+    href: null,
+  },
+  {
+    slug: "aid",
+    nome: "AID",
+    titulo: "Automação Inteligente de Dados",
+    descricao:
+      "Dashboards, indicadores e BI com IA analítica. O dado deixa de ser relatório parado e vira decisão no momento certo.",
+    icone: ChartColumn,
+    href: null,
+  },
+  {
+    slug: "aic",
+    nome: "AIC",
+    titulo: "Automação Inteligente de Compliance",
+    descricao:
+      "Auditoria, LGPD, gestão de risco e governança contratual, com trilha e evidência de cada etapa registradas automaticamente.",
+    icone: ShieldCheck,
+    href: null,
+  },
+  {
+    slug: "ais",
+    nome: "AIS",
+    titulo: "Automação Inteligente de Sistemas",
+    descricao:
+      "Integração entre ERPs, CRMs, APIs e plataformas. Seus sistemas passam a conversar entre si, sem planilha no meio do caminho.",
+    icone: Workflow,
+    href: null,
+  },
 ];
+
+function CardConteudo({ modulo }: { modulo: Modulo }) {
+  const Icone = modulo.icone;
+  const disponivel = modulo.href !== null;
+
+  return (
+    <>
+      <div className="flex items-start justify-between gap-3">
+        <div
+          className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0"
+          style={{ background: "rgba(0,210,255,0.12)" }}
+        >
+          <Icone className="size-5" style={{ color: "var(--vs-cyan)" }} />
+        </div>
+        {disponivel ? (
+          <ArrowUpRight
+            className="size-4 opacity-50 group-hover:opacity-100 transition-opacity shrink-0 mt-1"
+            style={{ color: "var(--vs-cyan)" }}
+          />
+        ) : (
+          <span
+            className="text-[10px] uppercase tracking-[0.14em] px-2 py-1 rounded-full shrink-0"
+            style={{ background: "rgba(255,255,255,0.06)", color: "var(--vs-text-muted)" }}
+          >
+            Em breve
+          </span>
+        )}
+      </div>
+      <p className="font-semibold text-base mt-4">{modulo.nome}</p>
+      <p className="text-sm mt-0.5" style={{ color: "var(--vs-cyan)" }}>
+        {modulo.titulo}
+      </p>
+      <p className="text-[13px] mt-2 leading-relaxed" style={{ color: "var(--vs-text-muted)" }}>
+        {modulo.descricao}
+      </p>
+    </>
+  );
+}
 
 function App() {
   return (
@@ -53,50 +139,35 @@ function App() {
             </h2>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 max-w-3xl mx-auto">
-            {MODULOS.map((m) => (
-              <a
-                key={m.slug}
-                href={m.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group rounded-2xl p-6 text-left transition-all hover:-translate-y-0.5"
-                style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(0,210,255,0.25)",
-                }}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div
-                    className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ background: "rgba(0,210,255,0.12)" }}
-                  >
-                    <FileText className="size-5" style={{ color: "var(--vs-cyan)" }} />
-                  </div>
-                  <ArrowUpRight
-                    className="size-4 opacity-50 group-hover:opacity-100 transition-opacity shrink-0 mt-1"
-                    style={{ color: "var(--vs-cyan)" }}
-                  />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {MODULOS.map((m) =>
+              m.href ? (
+                <a
+                  key={m.slug}
+                  href={m.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group rounded-2xl p-6 text-left transition-all hover:-translate-y-0.5"
+                  style={{
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(0,210,255,0.25)",
+                  }}
+                >
+                  <CardConteudo modulo={m} />
+                </a>
+              ) : (
+                <div
+                  key={m.slug}
+                  className="rounded-2xl p-6 text-left"
+                  style={{
+                    background: "rgba(255,255,255,0.015)",
+                    border: "1px dashed rgba(255,255,255,0.12)",
+                  }}
+                >
+                  <CardConteudo modulo={m} />
                 </div>
-                <p className="font-semibold text-base mt-4">{m.nome}</p>
-                <p className="text-sm mt-0.5" style={{ color: "var(--vs-cyan)" }}>
-                  {m.titulo}
-                </p>
-                <p className="text-[13px] mt-2 leading-relaxed" style={{ color: "var(--vs-text-muted)" }}>
-                  {m.descricao}
-                </p>
-              </a>
-            ))}
-
-            {/* Espaço reservado pro módulo de Pedidos, quando ele entrar aqui também */}
-            <div
-              className="rounded-2xl p-6 flex items-center justify-center text-center"
-              style={{ background: "rgba(255,255,255,0.015)", border: "1px dashed rgba(255,255,255,0.12)" }}
-            >
-              <p className="text-xs" style={{ color: "var(--vs-text-muted)" }}>
-                Mais soluções em breve
-              </p>
-            </div>
+              ),
+            )}
           </div>
         </section>
       </main>
