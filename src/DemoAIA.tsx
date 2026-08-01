@@ -152,7 +152,7 @@ export default function DemoAIA() {
   const [passo, setPasso] = useState(1); // primeira mensagem do lead já visível
   const [digitando, setDigitando] = useState(false);
   const [rascunho, setRascunho] = useState("");
-  const fimRef = useRef<HTMLDivElement>(null);
+  const listaRef = useRef<HTMLDivElement>(null);
 
   const roteiro = modo === "com" ? ROTEIRO : ROTEIRO_SEM;
   const visiveis = roteiro.slice(0, passo);
@@ -188,9 +188,15 @@ export default function DemoAIA() {
     return () => clearTimeout(t);
   }, [passo, modo, acabou, proximo]);
 
+  // scrollIntoView rolaria todos os containers acima, incluindo a janela: no
+  // celular isso joga a página inteira pra cima a cada mensagem. Mexer no
+  // scrollTop do próprio container mantém o movimento contido na conversa.
   useEffect(() => {
-    fimRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [passo, digitando]);
+    const lista = listaRef.current;
+    if (!lista) return;
+    const reduzido = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    lista.scrollTo({ top: lista.scrollHeight, behavior: reduzido ? "auto" : "smooth" });
+  }, [passo, digitando, modo]);
 
   function trocarModo(novo: "com" | "sem") {
     setModo(novo);
@@ -266,7 +272,11 @@ export default function DemoAIA() {
           {/* Conversa */}
           <div
             className="rounded-2xl overflow-hidden flex flex-col"
-            style={{ background: "var(--vs-bg-deep)", border: "1px solid rgba(255,255,255,0.09)", height: 520 }}
+            style={{
+              background: "var(--vs-bg-deep)",
+              border: "1px solid rgba(255,255,255,0.09)",
+              height: "min(520px, 70svh)",
+            }}
           >
             <div
               className="px-4 py-3 flex items-center gap-3 shrink-0"
@@ -286,7 +296,7 @@ export default function DemoAIA() {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-2.5">
+            <div ref={listaRef} className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-2.5">
               {visiveis.map((t, i) => (
                 <div key={i} className="demo-entra">
                   <Balao turno={t} hora={horaDoTurno(i, modo)} />
@@ -313,7 +323,6 @@ export default function DemoAIA() {
                   <Digitando />
                 </div>
               )}
-              <div ref={fimRef} />
             </div>
 
             <div className="p-3 shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
